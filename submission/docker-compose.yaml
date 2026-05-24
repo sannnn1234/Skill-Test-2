@@ -1,0 +1,115 @@
+version: "3.9"
+
+networks:
+  microservices-net:
+    driver: bridge
+
+services:
+
+  user-service:
+    build:
+      context: ./services/user-service
+      dockerfile: Dockerfile
+    image: user-service:latest
+    container_name: user-service
+    restart: unless-stopped
+    networks:
+      - microservices-net
+    ports:
+      - "3000:3000"       
+    environment:
+      PORT: "3000"
+      SERVICE_NAME: "user-service"
+      NODE_ENV: "production"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+ 
+  product-service:
+    build:
+      context: ./services/product-service
+      dockerfile: Dockerfile
+    image: product-service:latest
+    container_name: product-service
+    restart: unless-stopped
+    networks:
+      - microservices-net
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: "3001"
+      SERVICE_NAME: "product-service"
+      NODE_ENV: "production"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ── Order Service ─────────────────────────────────────────────
+  order-service:
+    build:
+      context: ./services/order-service
+      dockerfile: Dockerfile
+    image: order-service:latest
+    container_name: order-service
+    restart: unless-stopped
+    networks:
+      - microservices-net
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: "3002"
+      SERVICE_NAME: "order-service"
+      NODE_ENV: "production"
+      USER_SERVICE_URL: "http://user-service:3000"
+      PRODUCT_SERVICE_URL: "http://product-service:3001"
+    depends_on:
+      user-service:
+        condition: service_healthy
+      product-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3002/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+
+  gateway-service:
+    build:
+      context: ./services/gateway-service
+      dockerfile: Dockerfile
+    image: gateway-service:latest
+    container_name: gateway-service
+    restart: unless-stopped
+    networks:
+      - microservices-net
+    ports:
+      - "3003:3003"       
+    environment:
+      PORT: "3003"
+      SERVICE_NAME: "gateway-service"
+      NODE_ENV: "production"
+      USER_SERVICE_URL: "http://user-service:3000"
+      PRODUCT_SERVICE_URL: "http://product-service:3001"
+      ORDER_SERVICE_URL: "http://order-service:3002"
+    depends_on:
+      user-service:
+        condition: service_healthy
+      product-service:
+        condition: service_healthy
+      order-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3003/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

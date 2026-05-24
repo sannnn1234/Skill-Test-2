@@ -1,0 +1,54 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: microservices-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+  labels:
+    app: microservices-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: microservices.local      # Add to /etc/hosts: $(minikube ip) microservices.local
+      http:
+        paths:
+          # Gateway (root) — must be last to avoid swallowing other paths
+          - path: /()(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: gateway-service
+                port:
+                  number: 3003
+
+          # User Service: /api/users → /users
+          - path: /api/users(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 3000
+
+          # Product Service: /api/products → /products
+          - path: /api/products(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: product-service
+                port:
+                  number: 3001
+
+          # Order Service: /api/orders → /orders
+          - path: /api/orders(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: 3002

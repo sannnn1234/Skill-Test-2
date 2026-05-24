@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service
+  namespace: default
+  labels:
+    app: gateway-service
+    tier: frontend
+    version: "1.0.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-service
+  template:
+    metadata:
+      labels:
+        app: gateway-service
+        tier: frontend
+    spec:
+      containers:
+        - name: gateway-service
+          image: gateway-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3003
+              protocol: TCP
+          env:
+            - name: PORT
+              value: "3003"
+            - name: SERVICE_NAME
+              value: "gateway-service"
+            - name: NODE_ENV
+              value: "production"
+            - name: USER_SERVICE_URL
+              value: "http://user-service:3000"
+            - name: PRODUCT_SERVICE_URL
+              value: "http://product-service:3001"
+            - name: ORDER_SERVICE_URL
+              value: "http://order-service:3002"
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "300m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3003
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            failureThreshold: 3
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3003
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 3
+      restartPolicy: Always
