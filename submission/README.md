@@ -237,11 +237,5 @@ Get Minikube IP:
 ```powershell
 minikube ip
 ```
-
-
-curl.exe http://microservices.local/api/products
-curl.exe http://microservices.local/api/orders
-```
-
 ---
 
