@@ -30,7 +30,7 @@ minikube status
 kubectl get nodes
 ```
 ---
-![Local Setup](https://raw.githubusercontent.com/sannnn1234/Skill-Test-2/main/screenshots/minikube.png)
+![Local Setup](https://raw.githubusercontent.com/sannnn1234/Skill-Test-2/main/submission/screenshots/minikube.png)
 
 
 ---
@@ -60,7 +60,7 @@ docker build -t order-service:latest   ./services/order-service/
 docker build -t gateway-service:latest ./services/gateway-service/
 ```
 ---
-![Local Setup](https://raw.githubusercontent.com/sannnn1234/Skill-Test-2/submission/screenshots/docker.png)
+![Local Setup](https://raw.githubusercontent.com/sannnn1234/Skill-Test-2/main/submission/screenshots/docker.png)
 
 Verify images:
 
