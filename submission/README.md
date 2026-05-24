@@ -100,11 +100,7 @@ kubectl get svc
 ```
 
 Expected:
-
-```text
-STATUS = Running
-READY  = 1/1
-```
+![Local Setup](https://raw.githubusercontent.com/sannnn1234/Skill-Test-2/main/submission/screenshots/pods.png)
 
 ---
 
