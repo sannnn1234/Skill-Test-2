@@ -114,8 +114,8 @@ kubectl port-forward svc/user-service 3000:3000
 
 Test:
 
-```powershell
-curl.exe http://localhost:3000/users
+```
+ http://localhost:3000/users
 ```
 
 ---
@@ -128,8 +128,8 @@ kubectl port-forward svc/product-service 3001:3001
 
 Test:
 
-```powershell
-curl.exe http://localhost:3001/products
+```
+ http://localhost:3001/products
 ```
 
 ---
@@ -191,14 +191,14 @@ kubectl exec deployment/gateway-service -- wget -qO- http://order-service:3002/o
 # Step 8 — Create Order
 
 ```powershell
-curl.exe -X POST http://localhost:3003/api/orders `
--H "Content-Type: application/json" `
--d "{\"userId\":1,\"productId\":2}"
+ Invoke-RestMethod `
+-Uri "http://localhost:3003/api/orders" `
+-Method POST `
+-ContentType "application/json" `
+-Body '{"userId":1,"productId":2}'
 ```
 
 Verify:
-
-
 
 ---
 
@@ -236,10 +236,7 @@ Get Minikube IP:
 minikube ip
 ```
 
-Test ingress:
 
-```powershell
-curl.exe http://microservices.local/api/users
 curl.exe http://microservices.local/api/products
 curl.exe http://microservices.local/api/orders
 ```
