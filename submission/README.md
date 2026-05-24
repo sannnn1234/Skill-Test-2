@@ -30,7 +30,7 @@ minikube status
 kubectl get nodes
 ```
 ---
-![Local Setup](https://raw.githubusercontent.com/sannnn1234/Skill-Test-2/submission/screenshots/minikube.png)
+![Local Setup](https://raw.githubusercontent.com/sannnn1234/Skill-Test-2/main/screenshots/minikube.png)
 
 
 ---
@@ -207,6 +207,7 @@ Verify:
 ---
 
 # Step 9 — Health Check
+```
  http://localhost:3000/health
  http://localhost:3001/health
  http://localhost:3002/health
@@ -230,25 +231,11 @@ kubectl get pods -n ingress-nginx
 ```
 
 Apply ingress:
-
 ```powershell
 kubectl apply -f ingress/ingress.yaml
 ```
 
-Add host entry:
-
-```powershell
-notepad C:\Windows\System32\drivers\etc\hosts
-```
-
-Add:
-
-```text
-<MINIKUBE_IP> microservices.local
-```
-
 Get Minikube IP:
-
 ```powershell
 minikube ip
 ```
@@ -263,6 +250,3 @@ curl.exe http://microservices.local/api/orders
 
 ---
 
-
-- screenshots/logs.png
-- screenshots/service-test.png
