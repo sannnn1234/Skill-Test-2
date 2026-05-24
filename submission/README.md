@@ -1,4 +1,6 @@
 # SKILL TEST 2
+Microservices on Kubernetes (Minikube)
+A production-style four-service Node.js application deployed on Kubernetes with full service discovery, probes, resource limits, ingress routing, and inter-service communication.
 
 
 ## Architecture Overview
